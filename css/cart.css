@@ -1,0 +1,158 @@
+.cart-container {
+    padding: 20px;
+}
+
+.cart-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-total {
+    font-size: 18px;
+    font-weight: bold;
+    align-self: center;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.cart-summary h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.cart-summary p {
+    margin: 0;
+}
+
+.cart-summary button {
+    margin-top: 20px;
+}
+
+
+
+/* cart.css */
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 15px 0;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.cart-item .item-details {
+    flex: 1;
+    margin-left: 15px;
+}
+
+.cart-item .item-details h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cart-item .item-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.cart-item .item-quantity {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item .item-quantity input {
+    width: 50px;
+    margin: 0 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cart-item .item-quantity button {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.cart-item .item-quantity button:hover {
+    background-color: #e8e8e8;
+}
+
+.cart-item .item-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.cart-item .remove-from-cart {
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.notification {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4caf50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 1000;
+    transition: opacity 0.5s;
+    opacity: 0;
+}
+
+.notification.show {
+    display: block;
+    opacity: 1;
+}
+
+
+
+
+.cart-icon {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: -7px;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 5px;
+}

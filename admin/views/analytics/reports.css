@@ -1,0 +1,75 @@
+/* General Card Styles */
+.card {
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Custom Container Padding */
+.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Specific styles for charts to make them fit nicely */
+canvas {
+    display: block;
+    max-width: 100%;
+}
+
+/* Header and Sidebar Adjustments */
+.wrapper {
+    display: flex;
+}
+
+#content {
+    flex: 1;
+    padding: 20px;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #343a40;
+    color: white;
+}
+
+#sidebar .components li {
+    padding: 10px;
+}
+
+#sidebar .components li a {
+    color: #ddd;
+    font-size: 16px;
+}
+
+#sidebar .components li a:hover {
+    color: white;
+    background: #1d2124;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 20px;
+    background: #23272b;
+    text-align: center;
+}
+
+/* Active Link Style */
+.components li a.active {
+    background: #007bff;
+    color: white;
+}

@@ -1,0 +1,55 @@
+/* order-confirmation.css */
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.confirmation-box {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.confirmation-box h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.confirmation-box p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.confirmation-box .btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+.confirmation-box .btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.confirmation-box a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.confirmation-box a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}

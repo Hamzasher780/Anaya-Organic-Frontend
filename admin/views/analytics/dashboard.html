@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/admin/admin-Css/admin.css">
+</head>
+<body>
+    <div class="wrapper d-flex">
+        <!-- Sidebar will be included here -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Content -->
+        <div id="content" class="p-4">
+            <!-- Header will be included here -->
+            <div id="header-container"></div>
+
+            <!-- Dashboard Content -->
+            <div class="container mt-4">
+                <h2>Dashboard</h2>
+                <div class="row">
+                    <!-- Orders Summary -->
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <div class="card-title">Orders</div>
+                                <div class="card-text" id="order-count">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Summary -->
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <div class="card-title">Users</div>
+                                <div class="card-text" id="user-count">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Summary -->
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <div class="card text-white bg-warning">
+                            <div class="card-body">
+                                <div class="card-title">Products</div>
+                                <div class="card-text" id="product-count">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Summary -->
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <div class="card text-white bg-danger">
+                            <div class="card-body">
+                                <div class="card-title">Revenue</div>
+                                <div class="card-text" id="revenue-total">$0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Table -->
+                <h3 class="mt-5">Recent Orders</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-orders">
+                        <!-- Recent orders will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer will be included here -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Function to dynamically load the HTML content
+        function loadHTMLContent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading HTML content:', error));
+        }
+    
+        // Load the Sidebar, Header, and Footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHTMLContent('sidebar-container', '/admin/views/partials/sidebar.html');
+            loadHTMLContent('header-container', '/admin/views/partials/header.html');
+            loadHTMLContent('footer-container', '/admin/views/partials/footer.html');
+    
+            // Fetch and display the admin statistics
+            fetchAdminStats();
+        });
+    
+        function fetchAdminStats() {
+            fetch('http://localhost:3000/admin/stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('order-count').textContent = data.totalOrders;
+                    document.getElementById('user-count').textContent = data.totalUsers;
+                    document.getElementById('product-count').textContent = data.totalProducts;
+                    document.getElementById('revenue-total').textContent = `PKR ${data.totalRevenue}`;
+    
+                    const recentOrdersTable = document.getElementById('recent-orders');
+                    recentOrdersTable.innerHTML = ''; // Clear any existing rows
+    
+                    data.recentOrders.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${order._id}</td>
+                            <td>${order.user ? order.user.username : 'N/A'}</td>
+                            <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                            <td>${order.status}</td>
+                            <td>PKR ${order.totalAmount}</td>
+                        `;
+                        recentOrdersTable.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching admin stats:', error));
+        }
+    </script>
+    
+</body>
+</html>

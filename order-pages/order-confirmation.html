@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Anaya Organics</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Add any additional CSS here -->
+</head>
+<body>
+
+    <!-- Reusable Header -->
+    <div id="header-container"></div>
+
+    <!-- Order Confirmation Section -->
+    <div class="container text-center mt-5">
+        <h1>Thank you for your order!</h1>
+        <p>Your order has been placed successfully. We have sent a confirmation email with the order details.</p>
+        <p>Your Order ID: <strong id="order-id"></strong></p>
+        <a href="order-history.html" class="btn btn-primary mt-3">View Order History</a>
+    </div>
+
+    <!-- Reusable Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Retrieve order ID from URL and display it
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('orderId');
+        document.getElementById('order-id').textContent = orderId;
+    </script>
+    <script src="scripts.js"></script> <!-- Script to load header and footer -->
+</body>
+</html>

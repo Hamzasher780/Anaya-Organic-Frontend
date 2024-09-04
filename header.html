@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Open+Sans:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #FEF4EC;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-right: 30px;
+        }
+
+        .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            color: #333;
+            margin-right: 15px;
+            
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #FBD0AE;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            margin-left: 15px;
+
+        }
+
+        .profile-dropdown .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .profile-dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .profile-dropdown .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .cart-icon img {
+            width: 24px;
+        }
+
+        .cart-icon .badge {
+            position: absolute;
+            top: 0;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 12px;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column;
+                text-align: center;
+                width: 100%;
+            }
+
+            .navbar-collapse {
+                background-color: #f8f9fa;
+                width: 100%;
+            }
+
+            .navbar-toggler {
+                display: block;
+            }
+
+            .navbar-toggler-icon {
+                color: #333;
+            }
+
+            .navbar-nav.ml-auto {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-item.d-lg-none {
+                margin-top: 10px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .navbar-expand-lg .navbar-collapse {
+                display: flex !important;
+                justify-content: center; /* Center the navbar links */
+            }
+
+            .navbar-toggler {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section Start -->
+    <div class="header_section">
+        <div class="container-fluid p-0">
+            <nav class="navbar navbar-expand-lg navbar-custom">
+                <a class="navbar-brand" href="index.html">Anaya Organics</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Products
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="products.html">All Products</a>
+                                <a class="dropdown-item" href="#">Category 1</a>
+                                <a class="dropdown-item" href="#">Category 2</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="client.html">Client</a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-icons ml-auto d-flex align-items-center">
+                        <li class="nav-item d-lg-none">
+                            <form class="form-inline search-bar">
+                                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                            </form>
+                        </li>
+                        <li class="nav-item profile-dropdown">
+                            <a href="#" class="nav-link">
+                                <img src="images/user-icon.png" alt="User" />
+                                <span id="username-display">Guest</span>
+                            </a>
+                            <div class="dropdown-content">
+                                <a href="#"><i class="fa fa-user"></i> Profile</a>
+                                <a href="#" id="logout-link"><i class="fa fa-sign-out"></i> Logout</a>
+                            </div>
+                        </li>
+                        <li class="nav-item cart-icon position-relative">
+                            <a class="nav-link" href="./add-to-Cart.html">
+                                <img src="/images/shopping_bag_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.svg" />
+                                <span id="cart-count" class="badge">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="./scripts.js"></script>
+</html>

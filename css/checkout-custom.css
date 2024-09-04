@@ -1,0 +1,133 @@
+/* checkout-custom.css */
+
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+h3 {
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.25rem;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-check {
+    margin-bottom: 15px;
+}
+
+.form-check-label {
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-check-label i {
+    margin-right: 10px;
+    font-size: 1.5rem;
+}
+
+.payment-details {
+    margin-left: 20px;
+}
+
+.btn-primary {
+    background-color: #ff4b5c;
+    border: none;
+    padding: 15px;
+    font-size: 1.1rem;
+}
+
+.btn-primary:hover {
+    background-color: #e63b4f;
+}
+
+.btn-block {
+    padding: 10px;
+}
+
+/* Order Review Section */
+#order-review {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+}
+
+#order-review .d-flex {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+#order-review .d-flex:last-child {
+    border-bottom: none;
+}
+.review-order h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#order-summary {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.order-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-image img {
+    max-width: 100px;
+    border-radius: 5px;
+}
+
+.item-details p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.item-quantity {
+    font-size: 0.9rem;
+}
+
+.item-price {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.summary-totals p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.summary-totals strong {
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background-color: #ff4b5c;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.btn-primary:hover {
+    background-color: #e63b4f;
+}
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Details - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="../../admin-Css/admin.css" />
+</head>
+<body>
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <!-- Page Content -->
+        <div id="content" class="p-4">
+            <!-- Header -->
+            <div id="header-container"></div>
+
+            <div class="container mt-4">
+                <h2 class="mb-4"><i class="fas fa-receipt"></i> Order Details</h2>
+                <div id="order-details" class="card shadow-sm">
+                    <!-- Order details will be dynamically loaded here -->
+                </div>
+                <div class="mt-4">
+                    <a href="./order.html" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+                    <button onclick="printOrder()" class="btn btn-primary"><i class="fas fa-print"></i> Print Order</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Load the Sidebar, Header, and Footer
+        document.addEventListener("DOMContentLoaded", function () {
+            loadHTMLContent("sidebar-container", "/admin/views/partials/sidebar.html");
+            loadHTMLContent("header-container", "/admin/views/partials/header.html");
+            loadHTMLContent("footer-container", "/admin/views/partials/footer.html");
+        });
+
+        // Function to dynamically load the HTML content
+        function loadHTMLContent(containerId, filePath) {
+            fetch(filePath)
+                .then((response) => response.text())
+                .then((data) => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch((error) => console.error("Error loading HTML content:", error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get("id");
+            loadOrderDetails(orderId);
+
+            function loadOrderDetails(orderId) {
+                fetch(`http://localhost:3000/api/orders/order/${orderId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log("Order details loaded:", data); // Log for debugging
+                        const orderDetails = document.getElementById("order-details");
+
+                        // Prefer username over email
+                        const customerName = data.user ? data.user.username || data.user.email : "N/A";
+
+                        orderDetails.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title"><strong>Order ID:</strong> ${data._id}</h5>
+                                <p><i class="fas fa-user"></i> <strong>Customer:</strong> ${customerName}</p>
+                                <p><i class="fas fa-calendar-alt"></i> <strong>Date:</strong> ${new Date(data.createdAt).toLocaleDateString()}</p>
+                                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> ${data.status}</p>
+                                <p><i class="fas fa-money-bill-wave"></i> <strong>Total:</strong> PKR ${data.totalAmount}</p>
+                                
+                                <h5 class="mt-4"><i class="fas fa-box"></i> Items</h5>
+                                <ul class="list-group">
+                                    ${data.items.map(item => `
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            ${item.product.name} (x${item.quantity})
+                                            <span class="badge bg-primary rounded-pill">PKR ${item.price}</span>
+                                        </li>
+                                    `).join("")}
+                                </ul>
+
+                                <h5 class="mt-4"><i class="fas fa-shipping-fast"></i> Shipping Address</h5>
+                                <p>
+                                    ${data.shippingAddress.firstName} ${data.shippingAddress.lastName}<br>
+                                    ${data.shippingAddress.address}<br>
+                                    ${data.shippingAddress.city}, ${data.shippingAddress.postalCode}<br>
+                                    ${data.shippingAddress.phone}<br>
+                                    ${data.shippingAddress.email}
+                                </p>
+                            </div>
+                        `;
+                    })
+                    .catch((error) => console.error("Error loading order details:", error));
+            }
+        });
+
+        // Function to print the order details
+        function printOrder() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <!-- Sidebar Toggle Button -->
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+        </button>
+
+        <!-- Dashboard Title -->
+        <h4 class="navbar-title ms-3">Admin Dashboard</h4>
+
+        <!-- Search Bar -->
+        <div class="navbar-search ms-auto">
+            <input type="text" class="form-control" placeholder="Search...">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <!-- Right Side: Notifications and Profile -->
+        <ul class="navbar-nav ms-auto">
+            <!-- Notifications Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge bg-danger" id="notification-count">3</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-box"></i> New Order Received</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-exclamation-triangle"></i> Product Stock Low</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus"></i> User Registered</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-center" href="#"><i class="fas fa-eye"></i> View All Notifications</a></li>
+                </ul>
+            </li>
+
+            <!-- User Profile Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle"></i> Admin
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" href="../analytics/admin-profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cogs"></i> Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="../auth/login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

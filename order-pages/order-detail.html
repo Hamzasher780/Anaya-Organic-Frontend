@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/order-detail.css"> <!-- Custom CSS for order details -->
+</head>
+<body>
+    <!-- Reusable Header -->
+    <div id="header-container"></div>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Order Details</h2>
+        <div class="order-info border p-3 mt-4">
+            <h4>Order ID: <span id="order-id"></span></h4>
+            <p><strong>Status:</strong> <span id="order-status">Pending</span></p>
+            <hr>
+            <h5>Items:</h5>
+            <ul id="order-items" class="list-group mb-3">
+                <!-- Dynamic list of ordered items -->
+            </ul>
+            <hr>
+            <p><strong>Shipping Address:</strong> <span id="shipping-address">1234 Street, City, Country</span></p>
+            <p><strong>Total Amount:</strong> PKR <span id="total-amount">0.00</span></p>
+        </div>
+        <div class="text-center mt-4">
+            <a href="order-history.html" class="btn btn-secondary">Back to Order History</a>
+        </div>
+    </div>
+
+    <!-- Reusable Footer -->
+    <div id="footer-container" class="mt-5"></div>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/order-details.js"></script> <!-- Custom JS for order details page -->
+</body>
+</html>

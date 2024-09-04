@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Anaya Organics</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/cart-custom.css"> <!-- Link to custom cart CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Open+Sans:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./css/cart-custome.css">
+    <link rel="stylesheet" href="./css/cart.css">
+    
+</head>
+<body>
+
+    <!-- Reusable Header -->
+    <div id="header-container"></div>
+
+    <!-- Notification message -->
+    <div id="notification" class="notification">Item updated in cart</div>
+
+    <!-- Cart Section Start -->
+    <div class="container ">
+      <h1 class="text-center">Your Cart</h1>
+      <div class="row mt-4">
+          <!-- Cart Items Section -->
+          <div class="col-lg-8" id="cart-items-container">
+              <!-- Header for the Cart Table -->
+              <div class="row text-center font-weight-bold">
+                  <div class="col-5 text-left">Product</div>
+                  <div class="col-2">Price</div>
+                  <div class="col-3">Quantity</div>
+                  <div class="col-2">Subtotal</div>
+              </div>
+              <hr>
+              <!-- Example Cart Item - Dynamic content will be inserted here by cart.js -->
+          </div>
+  
+          <!-- Cart Summary Section -->
+          <div class="col-lg-4">
+              <div class="card p-3 shadow-sm">
+                  <h3 class="font-weight-bold">CART TOTALS</h3>
+                  <hr>
+                  <div class="d-flex justify-content-between">
+                      <span>Subtotal</span>
+                      <span class="font-weight-bold" id="subtotal-price">PKR 0</span>
+                  </div>
+                  <div class="d-flex justify-content-between mt-2">
+                      <span>Shipping</span>
+                      <span>
+                          <select class="custom-select" id="shipping-select">
+                              <option value="free">Free Shipping</option>
+                              <option value="flat">PKR 5 Flat Rate</option>
+                          </select>
+                      </span>
+                  </div>
+                 
+                  <hr>
+                  <div class="d-flex justify-content-between">
+                      <span>Total</span>
+                      <span class="font-weight-bold" id="total-price">PKR 0</span>
+                  </div>
+                  <hr>
+                  <div class="progress mt-3" style="height: 10px;">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <small class="d-block mt-2 text-muted">Eligible for free Pakistan ground shipping</small>
+                  <!-- <button class="btn btn-outline-dark btn-block mt-3">USE YOUR Bank ACCOUNT</button> -->
+                  <button class="btn btn-primary btn-block mt-2" id="checkout-btn">
+                    <i class="fas fa-bolt"></i> CHECKOUT
+                </button>
+                
+                  <!-- <button class="btn btn-warning btn-block mt-2">Easypaisa</button> -->
+                  <!-- <div class="text-center mt-3">— OR —</div> -->
+                  <!-- <button class="btn btn-danger btn-block mt-2">CHECKOUT WITH JazzCash</button> -->
+              </div>
+          </div>
+      </div>
+  </div>
+  
+    <!-- Cart Section End -->
+
+    <!-- Reusable Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/plugin.js"></script>
+    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/owl.carousel.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <script src="scripts.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>

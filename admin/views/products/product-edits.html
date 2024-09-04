@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../../admin-Css/admin.css">
+</head>
+<body>
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <!-- Page Content -->
+        <div id="content" class="p-4">
+            <!-- Header -->
+            <div id="header-container"></div>
+
+            <div class="container mt-4">
+                <h2>Edit Product</h2>
+                <form id="product-edit-form">
+                    <div class="mb-3">
+                        <label for="product-name" class="form-label">Product Name</label>
+                        <input type="text" id="product-name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-category" class="form-label">Category</label>
+                        <input type="text" id="product-category" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-price" class="form-label">Price</label>
+                        <input type="number" id="product-price" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-stock" class="form-label">Stock</label>
+                        <input type="number" id="product-stock" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-description" class="form-label">Description</label>
+                        <textarea id="product-description" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="product-image" class="form-label">Upload Image</label>
+                        <input type="file" id="product-image" class="form-control" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <a href="products.html" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load the Sidebar, Header, and Footer
+            loadHTMLContent('sidebar-container', '/admin/views/partials/sidebar.html');
+            loadHTMLContent('header-container', '/admin/views/partials/header.html');
+            loadHTMLContent('footer-container', '/admin/views/partials/footer.html');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (productId) {  // Ensure productId exists
+        loadProductDetails(productId);
+    }
+
+            // Load product details
+            function loadProductDetails(productId) {
+                fetch(`http://localhost:3000/api/products/${productId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('product-name').value = data.name;
+                        document.getElementById('product-category').value = data.category;
+                        document.getElementById('product-price').value = data.price;
+                        document.getElementById('product-stock').value = data.stock;
+                        document.getElementById('product-description').value = data.description;
+                    })
+                    .catch(error => console.error('Error loading product details:', error));
+            }
+
+            // Submit form to update product
+            document.getElementById('product-edit-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                updateProduct(productId);
+            });
+
+            function updateProduct(productId) {
+                const updatedProduct = {
+                    name: document.getElementById('product-name').value,
+                    category: document.getElementById('product-category').value,
+                    price: document.getElementById('product-price').value,
+                    stock: document.getElementById('product-stock').value,
+                    description: document.getElementById('product-description').value
+                };
+
+                const formData = new FormData();
+                formData.append('name', updatedProduct.name);
+                formData.append('category', updatedProduct.category);
+                formData.append('price', updatedProduct.price);
+                formData.append('stock', updatedProduct.stock);
+                formData.append('description', updatedProduct.description);
+
+                const imageFile = document.getElementById('product-image').files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+
+                fetch(`http://localhost:3000/api/products/${productId}`, {
+                    method: 'PUT',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Product updated successfully');
+                        window.location.href = 'products.html';
+                    })
+                    .catch(error => console.error('Error updating product:', error));
+            }
+        });
+
+        // Function to dynamically load the HTML content
+        function loadHTMLContent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading HTML content:', error));
+        }
+    </script>
+</body>
+</html>

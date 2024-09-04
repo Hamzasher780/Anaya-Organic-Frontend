@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Stock Report - Admin Panel</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../admin-Css/admin.css" />
+  </head>
+  <body>
+    <div class="d-flex">
+      <!-- Sidebar -->
+      <div id="sidebar-container"></div>
+
+      <!-- Main Content -->
+      <div id="content" class="p-4 w-100">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <!-- Product Stock Report Content -->
+        <div class="container mt-4">
+          <h2>Product Stock Report</h2>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <select id="stockCategory" class="form-select">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Apparel">Apparel</option>
+                <option value="Home & Kitchen">Home & Kitchen</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <input
+                type="text"
+                id="productSearch"
+                class="form-control"
+                placeholder="Search by Product Name"
+              />
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-primary w-100" onclick="filterStock()">
+                Filter
+              </button>
+            </div>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Stock Quantity</th>
+              </tr>
+            </thead>
+            <tbody id="stockReportTable">
+              <!-- Stock data will be loaded here dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer -->
+        <div id="footer-container"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Load external components
+        function loadComponent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Sidebar, Header, and Footer
+            loadComponent('sidebar-container', '/admin/views/partials/sidebar.html');
+            loadComponent('header-container', '/admin/views/partials/header.html');
+            loadComponent('footer-container', '/admin/views/partials/footer.html');
+    
+            // Load the product stock report data
+            fetchStockReport();
+    
+            // Load categories dynamically
+            fetchCategories();
+        });
+    
+        function fetchCategories() {
+            fetch('http://localhost:3000/admin/reports/categories')
+                .then(response => response.json())
+                .then(categories => {
+                    const categorySelect = document.getElementById('stockCategory');
+                    categorySelect.innerHTML = '<option value="">All Categories</option>'; // Reset category options
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category;
+                        option.textContent = category;
+                        categorySelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching categories:', error));
+        }
+    
+        function fetchStockReport() {
+            fetch('http://localhost:3000/admin/reports/stock')
+                .then(response => response.json())
+                .then(data => {
+                    const stockTable = document.getElementById('stockReportTable');
+                    stockTable.innerHTML = ''; // Clear existing rows
+    
+                    data.forEach(stock => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${stock.productName}</td>
+                            <td>${stock.category}</td>
+                            <td>${stock.stockQuantity}</td>
+                        `;
+                        stockTable.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching stock report:', error));
+        }
+    
+        function filterStock() {
+            const category = document.getElementById('stockCategory').value;
+            const productName = document.getElementById('productSearch').value;
+            fetch(`http://localhost:3000/admin/reports/stock?category=${encodeURIComponent(category)}&productName=${encodeURIComponent(productName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const stockTable = document.getElementById('stockReportTable');
+                    stockTable.innerHTML = ''; // Clear existing rows
+    
+                    data.forEach(stock => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${stock.productName}</td>
+                            <td>${stock.category}</td>
+                            <td>${stock.stockQuantity}</td>
+                        `;
+                        stockTable.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error filtering stock:', error));
+        }
+    </script>
+    
+  </body>
+</html>

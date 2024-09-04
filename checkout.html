@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Express Checkout</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/checkout-custom.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+</head>
+
+<body>
+    <!-- Reusable Header -->
+    <div id="header-container">
+        <span id="cart-count">0</span>
+    </div> <!-- Placeholder for dynamic header -->
+
+    <!-- Checkout Form -->
+    <div class="container">
+        <form id="checkout-form">
+            <div class="row">
+                <!-- Billing Address -->
+                <div class="col-md-6">
+                    <div class="section billing-address">
+                        <h2>1. Billing Address</h2>
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email-address" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telephone</label>
+                            <input type="tel" id="telephone" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Billing Address</label>
+                            <textarea id="billing-address" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State/Territory</label>
+                            <input type="text" id="state" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="postcode">Postcode</label>
+                            <input type="text" id="postal-code" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="col-md-6">
+                    <div class="section payment-method">
+                        <h2>2. Payment Method</h2>
+                        <div class="form-check">
+                            <input type="radio" id="cod" name="payment-method" value="COD" class="form-check-input" checked />
+                            <label for="cod" class="form-check-label">
+                                <i class="fa fa-truck"></i> Cash on Delivery
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="bank" name="payment-method" value="Bank" class="form-check-input" />
+                            <label for="bank" class="form-check-label">
+                                <i class="fa fa-university"></i> Bank Payment
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="easypaisa" name="payment-method" value="Easypaisa" class="form-check-input" />
+                            <label for="easypaisa" class="form-check-label">
+                                <img src="images/easypaisa-icon.png" alt="Easypaisa" /> Easypaisa
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="jazzcash" name="payment-method" value="JazzCash" class="form-check-input" />
+                            <label for="jazzcash" class="form-check-label">
+                                <img src="images/jazzcash-icon.png" alt="JazzCash" /> JazzCash
+                            </label>
+                        </div>
+
+                        <!-- Dynamic Payment Sections -->
+                        <div id="bank-details" class="mt-3" style="display: none">
+                            <div class="form-group">
+                                <label for="bank-account">Bank Account Number</label>
+                                <input type="text" id="bank-account" class="form-control" />
+                            </div>
+                        </div>
+                        <div id="easypaisa-details" class="mt-3" style="display: none">
+                            <div class="form-group">
+                                <label for="easypaisa-phone">Easypaisa Phone Number</label>
+                                <input type="text" id="easypaisa-phone" class="form-control" />
+                            </div>
+                        </div>
+                        <div id="jazzcash-details" class="mt-3" style="display: none">
+                            <div class="form-group">
+                                <label for="jazzcash-phone">JazzCash Phone Number</label>
+                                <input type="text" id="jazzcash-phone" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Your Order -->
+                    <div class="section review-order mt-4">
+                        <h2>3. Review Your Order</h2>
+                        <div id="order-summary" class="border p-3">
+                            <!-- Order items will be dynamically inserted here -->
+                            <!-- Subtotal and Total -->
+                            <div class="summary-totals mt-4">
+                                <div class="d-flex justify-content-between">
+                                    <p>Subtotal</p>
+                                    <p><strong id="subtotal-amount">PKR 0</strong></p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p>Shipping Total</p>
+                                    <p><strong id="shipping-amount">Free</strong></p>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p>Grand Total</p>
+                                    <p><strong id="grand-total-amount">PKR 0</strong></p>
+                                </div>
+                            </div>
+
+                            <!-- Place Order Button -->
+                            <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
+                                Place Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Reusable Footer -->
+    <div id="footer-container" class="mt-5"></div> <!-- Placeholder for dynamic footer -->
+
+    <!-- Scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            console.log('Place order button clicked.');
+
+            if (!validateFormFields()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method.');
+                return;
+            }
+
+            if (selectedPaymentMethod.value === 'COD') {
+                createOrder();
+            } else {
+                alert('Redirecting to payment gateway...');
+                createOrder();
+            }
+        });
+
+        function validateFormFields() {
+            const requiredFields = document.querySelectorAll('#checkout-form [required]');
+            let isValid = true;
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                }
+            });
+            return isValid;
+        }
+
+        function createOrder() {
+            console.log('Creating order...');
+            // Order creation logic
+        }
+    </script>
+    <script src="js/checkout.js"></script> <!-- Ensure this path is correct -->
+    <script src="scripts.js"></script> <!-- Script to load header and footer -->
+</body>
+
+</html>

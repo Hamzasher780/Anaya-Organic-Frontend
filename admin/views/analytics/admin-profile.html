@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../../admin-Css/admin.css">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <!-- Main Content -->
+        <div id="content" class="p-4 w-100">
+            <!-- Header -->
+            <div id="header-container"></div>
+
+            <!-- Admin Profile Content -->
+            <div class="container mt-4">
+                <h2>Admin Profile</h2>
+                <form id="adminProfileForm" onsubmit="updateProfile(event)">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword">
+                        <i class="fas fa-eye password-toggle position-absolute" style="top: 35px; right: 15px; cursor: pointer;" onclick="togglePasswordVisibility('currentPassword', this)"></i>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPassword">
+                        <i class="fas fa-eye password-toggle position-absolute" style="top: 35px; right: 15px; cursor: pointer;" onclick="togglePasswordVisibility('newPassword', this)"></i>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Load external components
+        function loadComponent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading component:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load Sidebar, Header, and Footer
+            loadComponent('sidebar-container', '/admin/views/partials/sidebar.html');
+            loadComponent('header-container', '/admin/views/partials/header.html');
+            loadComponent('footer-container', '/admin/views/partials/footer.html');
+
+            // Load admin profile data
+            fetchAdminProfile();
+        });
+
+        function fetchAdminProfile() {
+            fetch('http://localhost:3000/admin/profile', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('username').value = data.username;
+                document.getElementById('email').value = data.email;
+            })
+            .catch(error => console.error('Error fetching admin profile:', error));
+        }
+
+        function updateProfile(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            fetch('http://localhost:3000/admin/profile', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, currentPassword, newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Profile updated successfully') {
+                    alert('Profile updated successfully!');
+                    // Clear password fields
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newPassword').value = '';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error updating profile:', error));
+        }
+
+        function togglePasswordVisibility(fieldId, toggleIcon) {
+            const passwordField = document.getElementById(fieldId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>

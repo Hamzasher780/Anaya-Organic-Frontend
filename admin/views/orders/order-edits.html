@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="../../admin-Css/admin.css">
+</head>
+<body>
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+
+        <!-- Page Content -->
+        <div id="content" class="p-4">
+            <!-- Header -->
+            <div id="header-container"></div>
+
+            <div class="container mt-4">
+                <h2>Edit Order</h2>
+                <!-- Input for manually entering Order ID -->
+                <div class="mb-3">
+                    <label for="manual-order-id" class="form-label">Enter Order ID</label>
+                    <div class="input-group">
+                        <input type="text" id="manual-order-id" class="form-control">
+                        <button class="btn btn-primary" id="fetch-order-btn">Fetch Order</button>
+                    </div>
+                </div>
+                <form id="order-edit-form" style="display:none;">
+                    <div class="mb-3">
+                        <label for="order-id" class="form-label">Order ID</label>
+                        <input type="text" id="order-id" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customer-name" class="form-label">Customer Name</label>
+                        <input type="text" id="customer-name" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="order-status" class="form-label">Order Status</label>
+                        <select id="order-status" class="form-select">
+                            <option value="Pending">Pending</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="shipping-address" class="form-label">Shipping Address</label>
+                        <textarea id="shipping-address" class="form-control" rows="3"></textarea>
+                    </div>
+                    <!-- Additional fields like phone, email, etc. -->
+                    <div class="mb-3">
+                        <label for="order-total" class="form-label">Total Amount</label>
+                        <input type="text" id="order-total" class="form-control" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="orders.html" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Load the Sidebar, Header, and Footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHTMLContent('sidebar-container', '/admin/views/partials/sidebar.html');
+            loadHTMLContent('header-container', '/admin/views/partials/header.html');
+            loadHTMLContent('footer-container', '/admin/views/partials/footer.html');
+        });
+
+        // Function to dynamically load the HTML content
+        function loadHTMLContent(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                })
+                .catch(error => console.error('Error loading HTML content:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderIdFromUrl = urlParams.get('id');
+            
+            if (orderIdFromUrl) {
+                loadOrderDetails(orderIdFromUrl);
+            }
+
+            document.getElementById('fetch-order-btn').addEventListener('click', function() {
+                const manualOrderId = document.getElementById('manual-order-id').value;
+                if (manualOrderId) {
+                    loadOrderDetails(manualOrderId);
+                } else {
+                    alert('Please enter a valid Order ID.');
+                }
+            });
+
+            document.getElementById('order-edit-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const orderId = document.getElementById('order-id').value;
+                saveOrderChanges(orderId);
+            });
+
+            function loadOrderDetails(orderId) {
+                fetch(`http://localhost:3000/api/orders/order/${orderId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Order not found');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Order details loaded:", data);
+                        document.getElementById('order-id').value = data._id;
+                        document.getElementById('customer-name').value = data.user.username || data.user.email;
+                        document.getElementById('order-status').value = data.status;
+                        document.getElementById('shipping-address').value = `${data.shippingAddress.firstName} ${data.shippingAddress.lastName}\n${data.shippingAddress.address}\n${data.shippingAddress.city}, ${data.shippingAddress.postalCode}\n${data.shippingAddress.phone}\n${data.shippingAddress.email}`;
+                        document.getElementById('order-total').value = `PKR ${data.totalAmount}`;
+
+                        document.getElementById('order-edit-form').style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Error loading order details:', error);
+                        alert('Error loading order details. Please check the order ID.');
+                        document.getElementById('order-edit-form').style.display = 'none';
+                    });
+            }
+
+            function saveOrderChanges(orderId) {
+                const status = document.getElementById('order-status').value;
+                const shippingAddress = document.getElementById('shipping-address').value.split('\n');
+                
+                const [firstName, lastName, address, cityPostal, phone, email] = shippingAddress;
+                const [city, postalCode] = cityPostal.split(',').map(item => item.trim());
+
+                const updatedOrderDetails = {
+                    status,
+                    shippingAddress: {
+                        firstName,
+                        lastName,
+                        address,
+                        city,
+                        postalCode,
+                        phone,
+                        email
+                    }
+                };
+
+                fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedOrderDetails)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Order updated successfully:", data);
+                    alert('Order updated successfully');
+                    window.location.href = 'orders.html';
+                })
+                .catch(error => console.error('Error saving order changes:', error));
+            }
+        });
+    </script>
+</body>
+</html>

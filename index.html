@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Metadata and Stylesheets -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anaya Organics</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Open+Sans:400,700&display=swap&subset=latin-ext"
+          rel="stylesheet" />
+    <link rel="stylesheet" href="css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
+          media="screen" />
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+            transition: opacity 0.5s;
+            opacity: 0;
+        }
+
+        .notification.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -15px;
+            right: -7px;
+            background-color: black;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header section start -->
+<div id="header-container">
+    <span id="cart-count">0</span>
+</div>
+<!-- Header section end -->
+
+<!-- Notification message -->
+<div id="notification" class="notification">Item added to cart</div>
+
+<!-- Banner section start -->
+<div class="banner_section layout_padding">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h1 class="banner_taital">Beauty <br />Kit</h1>
+                            <p class="banner_text">Ncididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="banner_img">
+                                <img src="images/banner-img.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h1 class="banner_taital">Beauty <br />Brush</h1>
+                            <p class="banner_text">Ncididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="banner_img">
+                                <img src="images/banner-img.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more carousel items here -->
+        </div>
+    </div>
+</div>
+<!-- Banner section end -->
+
+<!-- Product section start -->
+<div class="product_section layout_padding">
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-12">
+              <h1 class="product_taital">Our Products</h1>
+              <p class="product_text">Check out our latest products.</p>
+          </div>
+      </div>
+      <div class="product_section_2 layout_padding">
+          <div class="row" id="dashboard-products">
+              <!-- First four products will be dynamically inserted here -->
+          </div>
+          <div class="seemore_bt"><a href="products.html">See More</a></div>
+      </div>
+  </div>
+</div>
+
+<!-- Product section end -->
+
+<!-- Footer section start -->
+<div id="footer-container"></div>
+<!-- Footer section end -->
+
+<!-- Scripts specific to this page -->
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/owl.carousel.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+<script src="scripts.js"></script>
+<script src="js/cart.js"></script>
+<script>
+    function loadFileIntoElement(url, elementId, callback) {
+        fetch(url)
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById(elementId).innerHTML = data;
+                if (callback) callback(); // Execute callback after loading
+            })
+            .catch((error) => console.error("Error loading file:", error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadFileIntoElement("header.html", "header-container", function () {
+            initializeNavbar();
+            fetchCartCount(); // Update the cart count from the backend
+        });
+        loadFileIntoElement("footer.html", "footer-container");
+        fetchAndDisplayDashboardProducts();
+    });
+
+    function fetchAndDisplayDashboardProducts() {
+        fetch('http://localhost:3000/api/products')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(products => {
+                const productSection = document.getElementById('dashboard-products');
+                productSection.innerHTML = ''; // Clear any existing content
+                const firstFourProducts = products.slice(0, 4);
+                firstFourProducts.forEach(product => {
+                    const productHTML = `
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="product_box">
+                                <h4 class="bursh_text">${product.name}</h4>
+                                <p class="lorem_text">${product.description}</p>
+                                <img src="http://localhost:3000${product.image}" class="image_1" alt="${product.name}" />
+                                <div class="btn_main">
+                                    <div class="buy_bt">
+                                        <ul>
+                                            <li class="active"><a href="#">Buy Now</a></li>
+                                            <li><a href="#" class="add-to-cart" data-product-id="${product._id}">Add Cart</a></li>
+                                        </ul>
+                                    </div>
+                                    <h3 class="price_text">PKR ${product.price}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    productSection.insertAdjacentHTML('beforeend', productHTML);
+                });
+
+                initializeAddToCart();
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    }
+
+    function initializeAddToCart() {
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+        const notificationElement = document.getElementById("notification");
+
+        addToCartButtons.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                const productId = button.getAttribute("data-product-id");
+                updateCartOnServer(productId, 1);
+            });
+        });
+    }
+
+    function fetchCartCount() {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            return;
+        }
+
+        fetch(`http://localhost:3000/api/cart/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            const cartCountElement = document.getElementById("cart-count");
+            const itemCount = cart.items ? cart.items.reduce((total, item) => total + item.quantity, 0) : 0;
+            cartCountElement.textContent = itemCount;
+            localStorage.setItem("cartCount", itemCount);
+        })
+        .catch(error => console.error('Error fetching cart count:', error));
+    }
+
+    function updateCartOnServer(productId, quantity) {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            console.error('User ID is missing from localStorage.');
+            return;
+        }
+
+        fetch('http://localhost:3000/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`, 
+            },
+            body: JSON.stringify({ userId, productId, quantity }), 
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            fetchCartCount(); // Refresh cart count after adding to cart
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+</body>
+</html>
