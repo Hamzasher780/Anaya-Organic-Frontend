@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function fetchCartItems() {
         console.log('Fetching cart items for user:', userId);
-        fetch(`http://localhost:3000/api/cart/${userId}`, {
+        fetch(`${config.API_URL}/api/cart/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
             }
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cartItemHTML = `
                 <div class="cart-item d-flex align-items-center mb-4 p-3 border rounded shadow-sm">
                     <div class="cart-item-image-wrapper">
-                        <img src="http://localhost:3000${item.product.image}" alt="${item.product.name}" class="cart-item-image rounded">
+                        <img src="${config.API_URL}${item.product.image}" alt="${item.product.name}" class="cart-item-image rounded">
                     </div>
                     <div class="item-details flex-grow-1 ml-3">
                         <h5 class="cart-item-title">${item.product.name}</h5>
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCartItem(productId, quantity) {
         console.log('Updating cart item:', productId, 'New quantity:', quantity);
-        fetch('http://localhost:3000/api/cart/update', {
+        fetch(`${config.API_URL}/api/cart/update`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function removeFromCart(productId) {
         console.log('Removing item from cart:', productId);
-        fetch('http://localhost:3000/api/cart/remove', {
+        fetch(`${config.API_URL}/api/cart/remove`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

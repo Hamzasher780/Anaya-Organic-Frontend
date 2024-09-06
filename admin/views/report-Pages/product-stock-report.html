@@ -71,6 +71,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../../js/config.js"></script>
     <script>
         // Load external components
         function loadComponent(containerId, filePath) {
@@ -96,7 +97,7 @@
         });
     
         function fetchCategories() {
-            fetch('http://localhost:3000/admin/reports/categories')
+            fetch(`${config.API_URL}/admin/reports/categories`)
                 .then(response => response.json())
                 .then(categories => {
                     const categorySelect = document.getElementById('stockCategory');
@@ -112,7 +113,7 @@
         }
     
         function fetchStockReport() {
-            fetch('http://localhost:3000/admin/reports/stock')
+            fetch(`${config.API_URL}/admin/reports/stock`)
                 .then(response => response.json())
                 .then(data => {
                     const stockTable = document.getElementById('stockReportTable');
@@ -134,7 +135,7 @@
         function filterStock() {
             const category = document.getElementById('stockCategory').value;
             const productName = document.getElementById('productSearch').value;
-            fetch(`http://localhost:3000/admin/reports/stock?category=${encodeURIComponent(category)}&productName=${encodeURIComponent(productName)}`)
+            fetch(`${config.API_URL}/admin/reports/stock?category=${encodeURIComponent(category)}&productName=${encodeURIComponent(productName)}`)
                 .then(response => response.json())
                 .then(data => {
                     const stockTable = document.getElementById('stockReportTable');

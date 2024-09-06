@@ -80,7 +80,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-
+    <script src="../../../js/config.js"></script>
     <script>
         // Function to load external HTML content into specific elements
         function loadHTMLContent(containerId, filePath) {
@@ -110,7 +110,7 @@
         }
 
         function loadSalesData() {
-            fetch('http://localhost:3000/admin/reports/sales')
+            fetch(`${config.API_URL}/admin/reports/sales`)
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(item => `Month ${item._id}`);
@@ -142,7 +142,7 @@
         }
 
         function loadUserActivityData() {
-            fetch('http://localhost:3000/admin/reports/user-activity')
+            fetch(`${config.API_URL}/admin/reports/user-activity`)
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(item => `Month ${item._id}`);
@@ -174,7 +174,7 @@
         }
 
         function loadRevenueData() {
-            fetch('http://localhost:3000/admin/reports/revenue')
+            fetch(`${config.API_URL}/admin/reports/revenue`)
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(item => `Month ${item._id}`);
@@ -206,7 +206,7 @@
         }
 
         function loadStockData() {
-            fetch('http://localhost:3000/admin/reports/stock')
+            fetch(`${config.API_URL}/admin/reports/stock`)
                 .then(response => response.json())
                 .then(data => {
                     const labels = data.map(product => product.name);

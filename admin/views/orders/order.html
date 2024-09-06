@@ -53,6 +53,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="../../../js/config.js"></script>
     <script>
         // Load the Sidebar, Header, and Footer
         document.addEventListener("DOMContentLoaded", function () {
@@ -86,7 +87,7 @@
             loadOrders(); // Load all orders by default
 
             function loadOrders() {
-                fetch("http://localhost:3000/api/orders")
+                fetch(`${config.API_URL}/api/orders`)
                     .then((response) => {
                         if (!response.ok) {
                             throw new Error("Network response was not ok");
@@ -101,7 +102,7 @@
             }
 
             function loadOrdersByUser(userId) {
-                fetch(`http://localhost:3000/api/orders/user/${userId}`)
+                fetch(`${config.API_URL}/api/orders/user/${userId}`)
                     .then((response) => response.json())
                     .then((data) => {
                         console.log(`Orders loaded for user ${userId}:`, data); // Log for debugging
@@ -146,7 +147,7 @@
             }
 
             function deleteOrder(orderId) {
-                fetch(`http://localhost:3000/api/orders/order/${orderId}`, {
+                fetch(`${config.API_URL}/api/orders/order/${orderId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -167,7 +168,7 @@
             }
 
             function loadUsers() {
-                fetch("http://localhost:3000/api/auth/users")
+                fetch(`${config.API_URL}/api/auth/users`)
                     .then((response) => response.json())
                     .then((data) => {
                         console.log("Users loaded:", data); // Log for debugging

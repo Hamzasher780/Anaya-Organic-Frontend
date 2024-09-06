@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const userId = localStorage.getItem('userId');
 
-    fetch(`http://localhost:3000/api/orders/user/${userId}`, {
+    fetch(`${config.API_URL}/api/orders/user/${userId}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
         }

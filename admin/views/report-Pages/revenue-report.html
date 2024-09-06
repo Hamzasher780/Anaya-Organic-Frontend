@@ -52,6 +52,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../../js/config.js"></script>
     <script>
         // Load external components
         function loadComponent(containerId, filePath) {
@@ -74,7 +75,7 @@
 });
 
 function fetchRevenueReport() {
-    fetch('http://localhost:3000/admin/reports/revenue')
+    fetch(`${config.API_URL}/admin/reports/revenue`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -104,7 +105,7 @@ function fetchRevenueReport() {
 function filterRevenue() {
     const startDate = document.getElementById('revenueStartDate').value;
     const endDate = document.getElementById('revenueEndDate').value;
-    fetch(`http://localhost:3000/admin/reports/revenue?start=${startDate}&end=${endDate}`)
+    fetch(`${config.API_URL}/admin/reports/revenue?start=${startDate}&end=${endDate}`)
         .then(response => response.json())
         .then(data => {
             if (!Array.isArray(data)) {

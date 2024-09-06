@@ -51,6 +51,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../../js/config.js"></script>
     <script>
         // Load external components
         function loadComponent(containerId, filePath) {
@@ -73,7 +74,7 @@
         });
 
         function fetchAdminProfile() {
-            fetch('http://localhost:3000/admin/profile', {
+            fetch(`${config.API_URL}/admin/profile`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
@@ -101,7 +102,7 @@
             const currentPassword = document.getElementById('currentPassword').value;
             const newPassword = document.getElementById('newPassword').value;
 
-            fetch('http://localhost:3000/admin/profile', {
+            fetch(`${config.API_URl}/admin/profile`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,

@@ -53,6 +53,7 @@
             padding: 3px 5px;
         }
     </style>
+    <script src="./js/config.js"></script>
     <script>
         function loadFileIntoElement(url, elementId) {
             fetch(url)
@@ -122,7 +123,7 @@
         });
 
         function fetchAndDisplayProducts() {
-            fetch('http://localhost:3000/api/products')
+            fetch(`${config.API_URL}/api/products`)
                 .then(response => response.json())
                 .then(products => {
                     const productSection = document.querySelector('.product_section_2 .row');
@@ -173,7 +174,7 @@
                 return;
             }
 
-            fetch(`http://localhost:3000/api/cart/${userId}`, {
+            fetch(`${config.API_URL}/api/cart/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
                 }
@@ -195,7 +196,7 @@
                 return;
             }
 
-            fetch('http://localhost:3000/api/cart/add', {
+            fetch(`${config.API_URL}/api/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

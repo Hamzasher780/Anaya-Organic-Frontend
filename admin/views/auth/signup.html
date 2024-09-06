@@ -32,6 +32,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/admin.js"></script>
+    <script src="../../../js/config.js"></script>
     <script>
         document.getElementById('signup-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -39,7 +40,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            fetch('/api/auth/signup', {
+            fetch(`${config.API_URL}/admin/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

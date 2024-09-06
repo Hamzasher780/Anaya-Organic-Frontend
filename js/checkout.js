@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCartCount();
 
     function fetchCartItems() {
-        fetch(`http://localhost:3000/api/cart/${userId}`, {
+        fetch(`${config.API_URL}/api/cart/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${authToken}`,
             }
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
             itemsHTML += `
                 <div class="order-item d-flex justify-content-between align-items-center mb-3">
                     <div class="item-image">
-                        <img src="http://localhost:3000${item.product.image}" alt="${item.product.name}" class="img-thumbnail">
+                        <img src="${config.API_URL}${item.product.image}" alt="${item.product.name}" class="img-thumbnail">
                     </div>
                     <div class="item-details ml-3 flex-grow-1">
                         <p><strong>${item.product.name}</strong></p>
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log('Order details:', orderDetails);
 
-        fetch('http://localhost:3000/api/orders/create', {
+        fetch(`${config.API_url}/api/orders/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to update the cart count in the header
     function updateCartCount() {
-        fetch(`http://localhost:3000/api/cart/${userId}`, {
+        fetch(`${config.API_URL}/api/cart/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${authToken}`,
             }
