@@ -53,7 +53,7 @@
             padding: 3px 5px;
         }
     </style>
-    <script src="./js/config.js"></script>
+    <script src="./js/config.js"></script> <!-- Ensure this script loads your config -->
     <script>
         function loadFileIntoElement(url, elementId) {
             fetch(url)
@@ -123,6 +123,7 @@
         });
 
         function fetchAndDisplayProducts() {
+            // Use config.API_URL to dynamically load the backend URL from config.js
             fetch(`${config.API_URL}/api/products`)
                 .then(response => response.json())
                 .then(products => {
@@ -134,7 +135,7 @@
                                 <div class="product_box">
                                     <h4 class="bursh_text">${product.name}</h4>
                                     <p class="lorem_text">${product.description}</p>
-                                    <img src="http://localhost:3000${product.image}" class="image_1" alt="${product.name}" />
+                                    <img src="${config.API_URL}${product.image}" class="image_1" alt="${product.name}" />
                                     <div class="btn_main">
                                         <div class="buy_bt">
                                             <ul>
@@ -174,6 +175,7 @@
                 return;
             }
 
+            // Fetch cart count from backend using config.API_URL
             fetch(`${config.API_URL}/api/cart/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
