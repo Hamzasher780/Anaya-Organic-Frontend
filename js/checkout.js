@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const jazzcashDetailsSection = document.getElementById('jazzcash-details');
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
+    const buyNowProductId = localStorage.getItem('buyNowProductId');
 
     console.log('Checking user ID from localStorage:', userId);
     console.log('Checking authToken from localStorage:', authToken);
@@ -28,11 +29,36 @@ document.addEventListener('DOMContentLoaded', function () {
         input.addEventListener('change', handlePaymentMethodChange);
     });
 
-    console.log('Fetching cart items for user:', userId);
-    fetchCartItems();
+    if (buyNowProductId) {
+        console.log('Buy Now triggered. Fetching single product:', buyNowProductId);
+        fetchSingleProduct(buyNowProductId);
+    } else {
+        console.log('Fetching cart items for user:', userId);
+        fetchCartItems();
+    }
 
     // Update cart count on page load
     updateCartCount();
+
+    function fetchSingleProduct(productId) {
+        fetch(`${config.API_URL}/api/products/${productId}`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch product');
+            }
+            return response.json();
+        })
+        .then(product => {
+            console.log('Product fetched successfully:', product);
+            displayBuyNowProduct(product);
+            updateTotalPrices([{ product, quantity: 1 }]); // Single product with quantity 1
+        })
+        .catch(error => console.error('Error fetching product:', error));
+    }
 
     function fetchCartItems() {
         fetch(`${config.API_URL}/api/cart/${userId}`, {
@@ -59,6 +85,28 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error fetching cart items:', error));
     }
 
+    function displayBuyNowProduct(product) {
+        console.log('Displaying Buy Now product:', product);
+
+        const itemHTML = `
+            <div class="order-item d-flex justify-content-between align-items-center mb-3">
+                <div class="item-image">
+                    <img src="${config.API_URL}${product.image}" alt="${product.name}" class="img-thumbnail">
+                </div>
+                <div class="item-details ml-3 flex-grow-1">
+                    <p><strong>${product.name}</strong></p>
+                </div>
+                <div class="item-quantity">
+                    Qty: 1
+                </div>
+                <div class="item-price">
+                    <strong>PKR ${product.price.toFixed(2)}</strong>
+                </div>
+            </div>`;
+
+        orderSummaryElement.innerHTML = itemHTML;
+    }
+
     function displayOrderItems(items) {
         console.log('Displaying order items:', items);
         let itemsHTML = '';
@@ -71,8 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                     <div class="item-details ml-3 flex-grow-1">
                         <p><strong>${item.product.name}</strong></p>
-                        <p>Color: ${item.product.color || 'N/A'}</p>
-                        <p>Size: ${item.product.size || 'N/A'}</p>
                     </div>
                     <div class="item-quantity">
                         Qty: ${item.quantity}

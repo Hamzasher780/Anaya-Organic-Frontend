@@ -150,47 +150,6 @@
      <script src="./js/config.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('checkout-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            console.log('Place order button clicked.');
-
-            if (!validateFormFields()) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-
-            const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
-            if (!selectedPaymentMethod) {
-                alert('Please select a payment method.');
-                return;
-            }
-
-            if (selectedPaymentMethod.value === 'COD') {
-                createOrder();
-            } else {
-                alert('Redirecting to payment gateway...');
-                createOrder();
-            }
-        });
-
-        function validateFormFields() {
-            const requiredFields = document.querySelectorAll('#checkout-form [required]');
-            let isValid = true;
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    isValid = false;
-                }
-            });
-            return isValid;
-        }
-
-        function createOrder() {
-            console.log('Creating order...');
-            // Order creation logic
-        }
-    </script>
     <script src="js/checkout.js"></script> <!-- Ensure this path is correct -->
     <script src="scripts.js"></script> <!-- Script to load header and footer -->
 </body>

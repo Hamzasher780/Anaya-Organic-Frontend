@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -139,7 +138,7 @@
                                     <div class="btn_main">
                                         <div class="buy_bt">
                                             <ul>
-                                                <li class="active"><a href="#">Buy Now</a></li>
+                                                <li><a href="#" class="buy-now" data-product-id="${product._id}">Buy Now</a></li>
                                                 <li><a href="#" class="add-to-cart" data-product-id="${product._id}">Add Cart</a></li>
                                             </ul>
                                         </div>
@@ -152,6 +151,7 @@
                     });
 
                     initializeAddToCart();
+                    initializeBuyNow();
                 })
                 .catch(error => console.error('Error fetching products:', error));
         }
@@ -165,6 +165,18 @@
                     event.preventDefault();
                     const productId = button.getAttribute('data-product-id');
                     updateCartOnServer(productId, 1);
+                });
+            });
+        }
+
+        function initializeBuyNow() {
+            const buyNowButtons = document.querySelectorAll('.buy-now');
+
+            buyNowButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const productId = button.getAttribute('data-product-id');
+                    buyNow(productId);
                 });
             });
         }
@@ -215,6 +227,22 @@
                 console.error('Error:', error);
             });
         }
+
+        function buyNow(productId) {
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                console.error('User ID is missing from localStorage.');
+                alert('Please log in to proceed.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Save product info to localStorage to access on checkout page
+            localStorage.setItem('buyNowProductId', productId);
+
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+        }
     </script>
 </head>
 
@@ -232,9 +260,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <h1 class="product_taital">Our Products</h1>
-                    <p class="product_text">
-                        Checkout Our Latest Products
-                    </p>
+                    <p class="product_text">Checkout Our Latest Products</p>
                 </div>
             </div>
             <div class="product_section_2 layout_padding">
