@@ -835,50 +835,50 @@ button {
 
 /* footer section start */
 
+/* footer section start */
 .footer_section {
-    width: 100%;
-    float: left;
     background-color: #252525;
-    height: auto;
-    background-size: 100%;
-    padding-bottom: 30px;
+    padding: 50px 0;
+    clear: both; /* Ensures no overlap with other content */
+    position: relative; /* Ensures it doesn’t extend over other elements */
+    width: 100%;
+    height: auto; /* Adjusts height based on content */
+    overflow: hidden; /* Prevents content from spilling over */
 }
 
 .footer_logo {
     width: 100%;
-    float: left;
     text-align: center;
     display: none;
 }
 
 .footer_logo_1 h2 {
-    width: 100%;
     color: white;
     text-align: left;
     font-size: 24px;
 }
 
-.footer_logo_1_links{
+.footer_logo_1_links {
     text-align: left;
     color: white;
-    padding: 10px 0px 0px 0px ;
-    
-}
-.address_bt {
-    width: 100%;
-    
+    padding: 10px 0;
 }
 
 .address_bt ul {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .address_bt li {
     font-size: 16px;
     color: #ffffff;
-    padding: 10px 0px 0px 0px;
-    text-align: left;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.address_bt li i {
+    margin-right: 10px;
 }
 
 .address_bt li a {
@@ -889,58 +889,33 @@ button {
     color: #f5ddb6;
 }
 
-
 .address_text {
     font-size: 24px;
     color: #ffffff;
     text-transform: uppercase;
 }
 
-.dummy_text {
-    width: 100%;
-    float: left;
-    font-size: 14px;
-    color: #ffffff;
-    margin: 0px;
-    text-align: center;
-    padding-top: 20px;
-}
-
-.ipsum_text {
-    width: 65%;
-    float: left;
+.ipsum_text li a {
     font-size: 16px;
     color: #ffffff;
-    margin: 0px;
     padding-top: 10px;
+    display: block;
 }
 
-.main {
-    width: 54%;
-    float: right;
-}
-
-.social_icon {
-    width: 50%;
-    margin: 0 auto;
-    text-align: center;
-    padding-top: 40px;
-    border-bottom: 1px solid #f5ddb6;
-    padding-bottom: 30px;
+.ipsum_text li a:hover {
+    color: #f5ddb6;
 }
 
 .social_icon ul {
-    margin: 0px;
-    padding: 0px;
-    display: inline-block;
-    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 .social_icon li {
-    float: left;
-    font-size: 26px;
+    display: inline-block;
+    font-size: 18px;
     color: #f5ddb6;
-    padding: 10px;
+    margin: 0 10px;
 }
 
 .social_icon li a {
@@ -951,35 +926,39 @@ button {
     color: #ffffff;
 }
 
-
-/* footer section end */
-
+/* copyright section */
 .copyright_section {
-    width: 100%;
-    float: left;
     background-color: #252525;
-    height: auto;
+    padding: 20px 0;
+    clear: both; /* Prevents overlap with other sections */
 }
 
 .copyright_text {
-    width: 100%;
     color: #ffffff;
-    text-align: center;
     font-size: 16px;
-    margin: 20px 0px;
+    margin: 0;
 }
 
 .copyright_text a {
     color: #ffffff;
 }
 
-.copyright_text a:hover {
+copyright_text a:hover {
     color: #f5ddb6;
 }
 
-.margin_top90 {
-    margin-top: 90px;
+/* Adjustments for responsiveness */
+@media (max-width: 768px) {
+    .footer_section .row {
+        text-align: center;
+    }
+
+    .address_bt ul,
+    .ipsum_text ul {
+        padding: 0;
+    }
+
+    .social_icon ul {
+        padding-top: 20px;
+    }
 }
-
-
-

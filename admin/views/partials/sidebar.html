@@ -1,69 +1,45 @@
-
-<nav id="sidebar">
-    <div class="sidebar-header">
+<link rel="stylesheet" href="../../admin-Css/sidebar.css">
+<nav id="sidebar" class="collapse d-lg-block bg-dark">
+    <div class="sidebar-header text-white text-center py-3">
         <h3>Anaya Organics</h3>
     </div>
     <ul class="list-unstyled components">
         <li>
-            <a href="../analytics/dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="../analytics/dashboard.html" class="text-white"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         </li>
-        
+
         <!-- Products Dropdown -->
         <li>
-            <a href="#productsSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-box"></i> Products</a>
+            <a href="#productsSubmenu" class="dropdown-toggle text-white" data-bs-toggle="collapse" aria-expanded="false"><i class="fas fa-box"></i> Products</a>
             <ul class="collapse list-unstyled" id="productsSubmenu">
-                <li>
-                    <a href="../products/products.html"><i class="fas fa-box-open"></i>Products</a>
-                </li>
-                <li>
-                    <a href="../products/product-add.html"><i class="fas fa-plus-square"></i> Add Product</a>
-                </li>
-                <li>
-                    <a href="../products/product-edits.html"><i class="fas fa-box-open"></i>Edit Products</a>
-                </li>
-            </ul>
-        </li>
-        
-        <!-- Orders Dropdown -->
-        <li>
-            <a href="#ordersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-shopping-cart"></i> Orders</a>
-            <ul class="collapse list-unstyled" id="ordersSubmenu">
-                <li>
-                    <a href="../orders/order.html"><i class="fas fa-shopping-bag"></i>Orders</a>
-                </li>
-                <li>
-                    <a href="../orders/order-details.html"><i class="fas fa-shopping-bag"></i>Orders Detail</a>
-                </li>
-                <li>
-                    <a href="../orders/order-edits.html"><i class="fas fa-shopping-bag"></i>Edit Orders </a>
-                </li>
-            </ul>
-        </li>
-        
-        <!-- Users Dropdown -->
-        <li>
-            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i> Users</a>
-            <ul class="collapse list-unstyled" id="usersSubmenu">
-                <li>
-                    <a href="../users/user.html"><i class="fas fa-user-friends"></i>Users</a>
-                </li>
-                <li>
-                    <a href="../users/user-detail.html"><i class="fas fa-user-friends"></i>Users Detail</a>
-                </li>
-                <li>
-                    <a href="../users/user-edit.html"><i class="fas fa-user-friends"></i>Edit Users</a>
-                </li>
+                <li><a href="../products/products.html" class="text-white"><i class="fas fa-box-open"></i> Products</a></li>
+                <li><a href="../products/product-add.html" class="text-white"><i class="fas fa-plus-square"></i> Add Product</a></li>
+                <li><a href="../products/product-edits.html" class="text-white"><i class="fas fa-box-open"></i> Edit Products</a></li>
             </ul>
         </li>
 
+        <!-- Orders Dropdown -->
         <li>
-            <a href="../analytics/reports.html"><i class="fas fa-chart-line"></i> Reports</a>
+            <a href="#ordersSubmenu" class="dropdown-toggle text-white" data-bs-toggle="collapse" aria-expanded="false"><i class="fas fa-shopping-cart"></i> Orders</a>
+            <ul class="collapse list-unstyled" id="ordersSubmenu">
+                <li><a href="../orders/order.html" class="text-white"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                <li><a href="../orders/order-details.html" class="text-white"><i class="fas fa-shopping-bag"></i> Orders Detail</a></li>
+                <li><a href="../orders/order-edits.html" class="text-white"><i class="fas fa-shopping-bag"></i> Edit Orders</a></li>
+            </ul>
         </li>
+
+        <!-- Users Dropdown -->
         <li>
-            <a href="settings.html"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="#usersSubmenu" class="dropdown-toggle text-white" data-bs-toggle="collapse" aria-expanded="false"><i class="fas fa-users"></i> Users</a>
+            <ul class="collapse list-unstyled" id="usersSubmenu">
+                <li><a href="../users/user.html" class="text-white"><i class="fas fa-user-friends"></i> Users</a></li>
+                <li><a href="../users/user-detail.html" class="text-white"><i class="fas fa-user-friends"></i> Users Detail</a></li>
+                <li><a href="../users/user-edit.html" class="text-white"><i class="fas fa-user-friends"></i> Edit Users</a></li>
+            </ul>
         </li>
-        <li>
-            <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </li>
+
+        <li><a href="../analytics/reports.html" class="text-white"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="../analytics/" class="text-white"><i class="fas fa-cogs"></i> Settings</a></li>
+        <li><a href="#" class="text-white"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
 </nav>

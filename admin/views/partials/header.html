@@ -1,26 +1,21 @@
+<link rel="stylesheet" href="../../admin-Css/sidebar.css">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex align-items-center">
         <!-- Sidebar Toggle Button -->
-        <button type="button" id="sidebarCollapse" class="btn btn-info">
-            <i class="fas fa-align-left"></i>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+            <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Dashboard Title -->
-        <h4 class="navbar-title ms-3">Admin Dashboard</h4>
-
-        <!-- Search Bar -->
-        <div class="navbar-search ms-auto">
-            <input type="text" class="form-control" placeholder="Search...">
-            <i class="fas fa-search"></i>
-        </div>
+        <h4 class="navbar-brand mb-0 ms-2 admin">Admin Dashboard</h4>
 
         <!-- Right Side: Notifications and Profile -->
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto align-items-center">
             <!-- Notifications Dropdown -->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown position-relative">
                 <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-bell"></i>
-                    <span class="badge bg-danger" id="notification-count">3</span>
+                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-1" id="notification-count">3</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
                     <li><a class="dropdown-item" href="#"><i class="fas fa-box"></i> New Order Received</a></li>
@@ -32,7 +27,7 @@
             </li>
 
             <!-- User Profile Dropdown -->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown ms-3">
                 <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-user-circle"></i> Admin
                 </a>

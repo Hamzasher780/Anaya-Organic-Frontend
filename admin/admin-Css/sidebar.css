@@ -1,0 +1,88 @@
+/* Basic layout for the sidebar and content */
+#sidebar {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+}
+
+#content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: all 0.3s;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+
+    #sidebar.collapse.show {
+        margin-left: 0;
+    }
+
+    #content {
+        margin-left: 0;
+    }
+}
+.navbar-toggler {
+    border: none;
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    padding: 0;
+}
+
+.nav-item .badge {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    font-size: 0.75rem;
+    padding: 4px;
+}
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item.dropdown {
+    position: relative;
+    margin-left: 15px;
+}
+.nav-item .ms-3 {
+    margin-left: 1rem !important;
+}
+
+.navbar-nav.align-items-center {
+    display: flex;
+    align-items: center;
+}
+.admin{
+    font-size: 19px;
+}
+/* Adjust the alignment of notification icon and user profile on smaller screens */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        margin-right: 10px;
+    }
+
+    .navbar-brand {
+        margin-left: 0;
+    }
+
+    .navbar-nav {
+        justify-content: flex-end;
+    }
+}
