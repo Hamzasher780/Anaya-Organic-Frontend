@@ -316,6 +316,13 @@ hr {
     color: #ff5c5c;
 }
 
+#place-order-button {
+    display: block !important; /* Ensures it is visible */
+    visibility: visible !important;
+    background-color: #ff4b5c; /* Or your preferred color */
+}
+
+
 
 
 .cart-item {

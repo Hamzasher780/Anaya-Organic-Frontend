@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const jazzcashDetailsSection = document.getElementById('jazzcash-details');
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
-    const buyNowProductId = localStorage.getItem('buyNowProductId');
+    let buyNowProductId = localStorage.getItem('buyNowProductId');
 
     console.log('Checking user ID from localStorage:', userId);
     console.log('Checking authToken from localStorage:', authToken);
@@ -21,25 +21,47 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // Hide bank, Easypaisa, and JazzCash details by default
     bankDetailsSection.style.display = 'none';
     easypaisaDetailsSection.style.display = 'none';
     jazzcashDetailsSection.style.display = 'none';
 
+    // Attach change handler for payment methods
     paymentMethodInputs.forEach(input => {
         input.addEventListener('change', handlePaymentMethodChange);
     });
 
-    if (buyNowProductId) {
-        console.log('Buy Now triggered. Fetching single product:', buyNowProductId);
-        fetchSingleProduct(buyNowProductId);
-    } else {
-        console.log('Fetching cart items for user:', userId);
-        fetchCartItems();
+    // Prioritize Cart Checkout over Buy Now
+    fetch(`${config.API_URL}/api/cart/${userId}`, {
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+        }
+    })
+    .then(response => response.json())
+    .then(cart => {
+        if (cart.items && cart.items.length > 0) {
+            // Clear Buy Now product if cart has items
+            clearBuyNow();
+            displayOrderItems(cart.items);
+            updateTotalPrices(cart.items);
+        } else if (buyNowProductId) {
+            // If cart is empty but Buy Now product exists, fetch and display it
+            fetchSingleProduct(buyNowProductId);
+        } else {
+            // Cart and Buy Now are both empty, display a message
+            orderSummaryElement.innerHTML = '<p>Your cart is empty.</p>';
+            updateTotalPrices([]);
+        }
+    })
+    .catch(error => console.error('Error fetching cart items:', error));
+
+    // Clear Buy Now product from localStorage
+    function clearBuyNow() {
+        localStorage.removeItem('buyNowProductId');
+        buyNowProductId = null;
     }
 
-    // Update cart count on page load
-    updateCartCount();
-
+    // Fetch single product for Buy Now functionality
     function fetchSingleProduct(productId) {
         fetch(`${config.API_URL}/api/products/${productId}`, {
             headers: {
@@ -56,35 +78,28 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Product fetched successfully:', product);
             displayBuyNowProduct(product);
             updateTotalPrices([{ product, quantity: 1 }]); // Single product with quantity 1
+
+            // *** Ensure the "Place Order" button is displayed for Buy Now flow ***
+            ensurePlaceOrderButton();
         })
         .catch(error => console.error('Error fetching product:', error));
     }
 
-    function fetchCartItems() {
-        fetch(`${config.API_URL}/api/cart/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${authToken}`,
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch cart items');
-            }
-            return response.json();
-        })
-        .then(cart => {
-            console.log('Cart fetched successfully:', cart);
-            if (cart.items && cart.items.length > 0) {
-                displayOrderItems(cart.items);
-                updateTotalPrices(cart.items);
-            } else {
-                orderSummaryElement.innerHTML = '<p>Your cart is empty.</p>';
-                updateTotalPrices([]);
-            }
-        })
-        .catch(error => console.error('Error fetching cart items:', error));
+    // Ensure the "Place Order" button is added to the DOM for Buy Now flow
+    function ensurePlaceOrderButton() {
+        const placeOrderButtonExists = document.getElementById('place-order-button');
+        if (!placeOrderButtonExists) {
+            const buttonHTML = `
+                <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
+                    Place Order
+                </button>
+            `;
+            orderSummaryElement.insertAdjacentHTML('beforeend', buttonHTML);
+            attachEventListeners();
+        }
     }
 
+    // Display Buy Now product in the checkout summary
     function displayBuyNowProduct(product) {
         console.log('Displaying Buy Now product:', product);
 
@@ -107,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         orderSummaryElement.innerHTML = itemHTML;
     }
 
+    // Display items from the cart in the checkout summary
     function displayOrderItems(items) {
         console.log('Displaying order items:', items);
         let itemsHTML = '';
@@ -144,15 +160,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><strong id="grand-total-amount">PKR 0</strong></p>
                 </div>
             </div>
-            <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
-                Place Order
-            </button>
         `;
 
         orderSummaryElement.innerHTML = itemsHTML;
-        attachEventListeners();
+        ensurePlaceOrderButton();  // Ensure button is present for cart checkout flow
     }
 
+    // Update the total prices (subtotal and grand total)
     function updateTotalPrices(items) {
         let subtotal = 0;
 
@@ -167,12 +181,13 @@ document.addEventListener('DOMContentLoaded', function () {
         grandTotalElement.textContent = `PKR ${subtotal.toFixed(2)}`;
     }
 
+    // Attach event listeners to the "Place Order" button
     function attachEventListeners() {
         const placeOrderButton = document.getElementById('place-order-button');
         if (placeOrderButton) {
             console.log('Adding event listener to Place Order button.');
             placeOrderButton.addEventListener('click', function (event) {
-                event.preventDefault(); // Ensure form does not submit traditionally
+                event.preventDefault(); // Prevent traditional form submission
                 console.log('Place order button clicked.');
 
                 if (!validateFormFields()) {
@@ -189,8 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (selectedPaymentMethod.value === 'COD') {
                     createOrder();
                 } else {
-                    alert('Redirecting to payment gateway...');
-                    createOrder();
+                    handleProofOfPayment(selectedPaymentMethod.value);
                 }
             });
         } else {
@@ -198,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Handle changing the payment method
     function handlePaymentMethodChange(event) {
         const selectedPaymentMethod = event.target.value;
         console.log('Payment method changed:', selectedPaymentMethod);
@@ -207,6 +222,18 @@ document.addEventListener('DOMContentLoaded', function () {
         jazzcashDetailsSection.style.display = selectedPaymentMethod === 'JazzCash' ? 'block' : 'none';
     }
 
+    // Handle proof of payment for non-COD methods
+    function handleProofOfPayment(paymentMethod) {
+        const proofInput = document.querySelector(`#${paymentMethod.toLowerCase()}-proof`);
+        if (!proofInput || !proofInput.files.length) {
+            alert(`Please upload proof of payment for ${paymentMethod}.`);
+            return;
+        }
+
+        createOrder(paymentMethod, proofInput.files[0]);
+    }
+
+    // Validate form fields before placing the order
     function validateFormFields() {
         const firstName = document.getElementById('first-name').value.trim();
         const lastName = document.getElementById('last-name').value.trim();
@@ -224,62 +251,79 @@ document.addEventListener('DOMContentLoaded', function () {
         return true;
     }
 
-    function createOrder() {
-        console.log('Creating order...');
-        
-        const firstName = document.getElementById('first-name').value;
-        const lastName = document.getElementById('last-name').value;
-        const email = document.getElementById('email-address').value;
-        const phone = document.getElementById('telephone').value;
-        const address = document.getElementById('billing-address').value;
-        const city = document.getElementById('city').value;
-        const postalCode = document.getElementById('postal-code').value;
+    // Create an order by sending data to the backend
+    // Create an order by sending data as JSON to the backend
+function createOrder(paymentMethod = 'COD', proofOfPaymentFile = null) {
+    console.log('Creating order...');
+    
+    const firstName = document.getElementById('first-name').value || '';
+    const lastName = document.getElementById('last-name').value || '';
+    const email = document.getElementById('email-address').value || '';
+    const phone = document.getElementById('telephone').value || '';
+    const address = document.getElementById('billing-address').value || '';
+    const city = document.getElementById('city').value || '';
+    const postalCode = document.getElementById('postal-code').value || '';
 
-        const orderDetails = {
-            userId: userId,
-            shippingAddress: {
-                firstName,
-                lastName,
-                email,
-                phone,
-                address,
-                city,
-                postalCode,
-            },
-            paymentMethod: document.querySelector('input[name="payment-method"]:checked').value,
-            totalAmount: parseFloat(grandTotalElement.textContent.replace('PKR ', ''))
-        };
-
-        console.log('Order details:', orderDetails);
-
-        fetch(`${config.API_url}/api/orders/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}`,
-            },
-            body: JSON.stringify(orderDetails)
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message); });
-            }
-            return response.json();
-        })
-        .then(order => {
-            console.log('Order created successfully:', order);
-            alert('Order created successfully!');
-
-            // Reset the cart count
-            updateCartCount();
-
-            window.location.href = 'order-confirmation.html';
-        })
-        .catch(error => {
-            console.error('Error creating order:', error);
-            alert('Failed to create order. Please try again.');
-        });
+    // Ensure none of the fields are undefined or null
+    if (!firstName || !lastName || !email || !phone || !address || !city || !postalCode) {
+        console.error('Some required fields are empty.');
+        alert('Please fill out all fields.');
+        return;
     }
+
+    // Construct the shippingAddress object
+    const shippingAddress = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        city,
+        postalCode
+    };
+
+    // Construct the order data
+    const orderData = {
+        userId: userId,
+        paymentMethod: paymentMethod,
+        totalAmount: parseFloat(grandTotalElement.textContent.replace('PKR ', '')),
+        shippingAddress: shippingAddress,  // Send as JSON object
+        buyNowProductId: buyNowProductId ? buyNowProductId : null
+    };
+
+    console.log('Order details:', orderData);
+
+    fetch(`${config.API_URL}/api/orders/create`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json' // Important: sending as JSON
+        },
+        body: JSON.stringify(orderData) // Convert the orderData object to a JSON string
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => { throw new Error(err.message); });
+        }
+        return response.json();
+    })
+    .then(order => {
+        console.log('Order created successfully:', order);
+        alert('Order created successfully!');
+
+        // Clear the Buy Now product and reset the cart count
+        clearBuyNow();
+        updateCartCount();
+
+        window.location.href = 'order-confirmation.html';
+    })
+    .catch(error => {
+        console.error('Error creating order:', error);
+        alert('Failed to create order. Please try again.');
+    });
+}
+
+    
 
     // Function to update the cart count in the header
     function updateCartCount() {

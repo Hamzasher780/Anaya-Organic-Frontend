@@ -199,7 +199,7 @@
                                 <div class="btn_main">
                                     <div class="buy_bt">
                                         <ul>
-                                            <li class="active"><a href="#">Buy Now</a></li>
+                                            <li class="active"><a href="#" class="buy-now" data-product-id="${product._id}">Buy Now</a></li>
                                             <li><a href="#" class="add-to-cart" data-product-id="${product._id}">Add Cart</a></li>
                                         </ul>
                                     </div>
@@ -212,10 +212,12 @@
                 });
 
                 initializeAddToCart();
+                initializeBuyNow();
             })
             .catch(error => console.error('Error fetching products:', error));
     }
 
+    // Initialize "Add to Cart" functionality
     function initializeAddToCart() {
         const addToCartButtons = document.querySelectorAll(".add-to-cart");
         const notificationElement = document.getElementById("notification");
@@ -225,6 +227,19 @@
                 event.preventDefault();
                 const productId = button.getAttribute("data-product-id");
                 updateCartOnServer(productId, 1);
+            });
+        });
+    }
+
+    // Initialize "Buy Now" functionality
+    function initializeBuyNow() {
+        const buyNowButtons = document.querySelectorAll(".buy-now");
+
+        buyNowButtons.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                const productId = button.getAttribute("data-product-id");
+                buyNowProduct(productId);
             });
         });
     }
@@ -274,6 +289,16 @@
             console.error('Error:', error);
         });
     }
+
+    // Buy Now Functionality
+    function buyNowProduct(productId) {
+        // Store the product ID in localStorage
+        localStorage.setItem('buyNowProductId', productId);
+
+        // Redirect to checkout page
+        window.location.href = 'checkout.html';
+    }
 </script>
+
 </body>
 </html>
