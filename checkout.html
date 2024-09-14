@@ -4,55 +4,130 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Express Checkout</title>
+    <title>Modern Checkout</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/checkout-custom.css" />
+    <link rel="stylesheet" href="css/checkout-modern.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Card Style for Sections */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styling */
+        .form-control,
+        .form-check-input {
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .form-check-label {
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* Review Order Section */
+        #order-summary {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        /* Summary Totals */
+        .summary-totals {
+            margin-top: 10px;
+        }
+
+        .summary-totals .row {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .summary-totals .col-6 {
+            padding: 0;
+        }
+
+        /* Place Order Button */
+        .btn-primary {
+            background-color: #ff6f61;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #e85750;
+        }
+    </style>
 </head>
 
 <body>
     <!-- Reusable Header -->
-    <div id="header-container">
-        <span id="cart-count">0</span>
-    </div>
+    <div id="header-container"></div>
 
     <!-- Checkout Form -->
-    <div class="container">
+    <div class="container py-5">
         <form id="checkout-form" enctype="multipart/form-data">
             <div class="row">
                 <!-- Billing Address -->
                 <div class="col-md-6">
-                    <div class="section billing-address">
+                    <div class="card">
                         <h2>Billing Address</h2>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="first-name">First Name</label>
                             <input type="text" id="first-name" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="last-name">Last Name</label>
                             <input type="text" id="last-name" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="email">Email Address</label>
                             <input type="email" id="email-address" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="phone">Telephone</label>
                             <input type="tel" id="telephone" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="address">Billing Address</label>
                             <textarea id="billing-address" class="form-control" required></textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="city">City</label>
                             <input type="text" id="city" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="state">State/Territory</label>
                             <input type="text" id="state" class="form-control" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="postcode">Postcode</label>
                             <input type="text" id="postal-code" class="form-control" required />
                         </div>
@@ -60,91 +135,102 @@
                 </div>
 
                 <!-- Payment Method -->
-                <div class="col-md-6">
-                    <div class="section payment-method">
-                        <h2>Payment Method</h2>
-                        <div class="form-check">
-                            <input type="radio" id="cod" name="payment-method" value="COD" class="form-check-input" checked />
-                            <label for="cod" class="form-check-label">
-                                <i class="fa fa-truck"></i> Cash on Delivery
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="bank" name="payment-method" value="Bank" class="form-check-input" />
-                            <label for="bank" class="form-check-label">
-                                <i class="fa fa-university"></i> Bank Payment
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="easypaisa" name="payment-method" value="Easypaisa" class="form-check-input" />
-                            <label for="easypaisa" class="form-check-label">
-                                <img src="images/easypaisa-icon.png" alt="Easypaisa" /> Easypaisa
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="jazzcash" name="payment-method" value="JazzCash" class="form-check-input" />
-                            <label for="jazzcash" class="form-check-label">
-                                <img src="images/jazzcash-icon.png" alt="JazzCash" /> JazzCash
-                            </label>
-                        </div>
+               <!-- Payment Method -->
+<div class="col-md-6">
+    <div class="card">
+        <h2>Payment Method</h2>
+        <div class="form-check mb-3">
+            <input type="radio" id="cod" name="payment-method" value="COD" class="form-check-input" checked />
+            <label for="cod" class="form-check-label">
+                <i class="fa fa-truck"></i> Cash on Delivery
+            </label>
+        </div>
+        <div class="form-check mb-3">
+            <input type="radio" id="bank" name="payment-method" value="Bank" class="form-check-input" />
+            <label for="bank" class="form-check-label">
+                <i class="fa fa-university"></i> Bank Payment
+            </label>
+        </div>
+        <div id="bank-details" style="display: none;">
+            <p><strong>Bank Name:</strong> XYZ Bank</p>
+            <p><strong>Account Number:</strong> 1234 5678 9012</p>
+            <p><strong>Account Holder:</strong> Merchant Name</p>
+            <div class="form-group">
+                <label for="bank-proof">Upload Payment Proof</label>
+                <input type="file" id="bank-proof" name="bank-proof" class="form-control">
+            </div>
+        </div>
+        <div class="form-check mb-3">
+            <input type="radio" id="easypaisa" name="payment-method" value="Easypaisa" class="form-check-input" />
+            <label for="easypaisa" class="form-check-label">
+                <img src="images/easypaisa-icon.png" alt="Easypaisa" /> Easypaisa
+            </label>
+        </div>
+        <div id="easypaisa-details" style="display: none;">
+            <div class="form-group">
+                <label for="easypaisa-proof">Upload Easypaisa Payment Proof</label>
+                <input type="file" id="easypaisa-proof" name="easypaisa-proof" class="form-control">
+            </div>
+        </div>
+        <div class="form-check mb-3">
+            <input type="radio" id="jazzcash" name="payment-method" value="JazzCash" class="form-check-input" />
+            <label for="jazzcash" class="form-check-label">
+                <img src="images/jazzcash-icon.png" alt="JazzCash" /> JazzCash
+            </label>
+        </div>
+        <div id="jazzcash-details" style="display: none;">
+            <div class="form-group">
+                <label for="jazzcash-proof">Upload JazzCash Payment Proof</label>
+                <input type="file" id="jazzcash-proof" name="jazzcash-proof" class="form-control">
+            </div>
+        </div>
+    </div>
+</div>
 
-                        <!-- Dynamic Payment Sections -->
-                        <div id="bank-details" class="mt-3" style="display: none;">
-                            <h5>Bank Transfer Instructions:</h5>
-                            <p>Please transfer the total amount to the following bank account:</p>
-                            <ul>
-                                <li>Bank Name: XYZ Bank</li>
-                                <li>Account Number: 1234567890</li>
-                                <li>Branch: Main Branch</li>
-                                <li>Account Holder: Anaya Organics</li>
-                            </ul>
-                            <label for="proof-of-payment">Upload Proof of Payment</label>
-                            <input type="file" id="proof-of-payment" name="proofOfPayment" accept="image/*" />
-                        </div>
 
-                        <!-- Easypaisa Payment Details -->
-                        <div id="easypaisa-details" class="mt-3" style="display: none;">
-                            <label for="easypaisa-phone">Easypaisa Phone Number</label>
-                            <input type="text" id="easypaisa-phone" class="form-control" />
-                            <label for="easypaisa-proof">Upload Easypaisa Proof of Payment</label>
-                            <input type="file" id="easypaisa-proof" name="proofOfPayment" accept="image/*" />
-                        </div>
-
-                        <!-- JazzCash Payment Details -->
-                        <div id="jazzcash-details" class="mt-3" style="display: none;">
-                            <label for="jazzcash-phone">JazzCash Phone Number</label>
-                            <input type="text" id="jazzcash-phone" class="form-control" />
-                            <label for="jazzcash-proof">Upload JazzCash Proof of Payment</label>
-                            <input type="file" id="jazzcash-proof" name="proofOfPayment" accept="image/*" />
-                        </div>
-                    </div>
-
-                    <!-- Review Your Order -->
-                    <div class="section review-order mt-4">
-                        <h2>Review Your Order</h2>
-                        <div id="order-summary" class="border p-3">
-                            <!-- Order items will be dynamically inserted here -->
-                            <!-- Subtotal and Total -->
-                            <div class="summary-totals">
-                                <div class="d-flex justify-content-between">
-                                    <p>Subtotal</p>
-                                    <p><strong id="subtotal-amount">PKR 0</strong></p>
+                        <!-- Review Your Order -->
+                        <div class="section review-order mt-4">
+                            <h2>Review Your Order</h2>
+                            <div id="order-summary" class="border p-3">
+                                <!-- Product Image and Name -->
+                                <div class="order-item d-flex flex-column align-items-center mb-3">
+                                    <div class="item-image mb-3">
+                                        <img src="" alt="Product Image" class="img-thumbnail" />
+                                    </div>
+                                    <div class="item-details text-center">
+                                        <p><strong id="product-name">Product Name</strong></p>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <p>Shipping Total</p>
-                                    <p><strong id="shipping-amount">Free</strong></p>
+                                <!-- Quantity, Price, Subtotal, Shipping, Grand Total -->
+                                <div class="summary-totals">
+                                    <div class="row">
+                                        <div class="col-6">Quantity</div>
+                                        <div class="col-6 text-right"><strong id="quantity-amount">1</strong></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">Price</div>
+                                        <div class="col-6 text-right"><strong id="price-amount">PKR 0.00</strong></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">Subtotal</div>
+                                        <div class="col-6 text-right"><strong id="subtotal-amount">PKR 0.00</strong></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">Shipping Total</div>
+                                        <div class="col-6 text-right"><strong id="shipping-amount">Free</strong></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">Grand Total</div>
+                                        <div class="col-6 text-right"><strong id="grand-total-amount">PKR 0.00</strong></div>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <p>Grand Total</p>
-                                    <p><strong id="grand-total-amount">PKR 0</strong></p>
-                                </div>
+                                <!-- Place Order Button -->
+                                <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
+                                    Place Order
+                                </button>
                             </div>
-
-                            <!-- Place Order Button -->
-                            <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
-                                Place Order
-                            </button>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -152,14 +238,14 @@
     </div>
 
     <!-- Reusable Footer -->
-    <div id="footer-container" class="mt-5"></div> <!-- Placeholder for dynamic footer -->
+    <div id="footer-container" class="mt-5"></div>
 
     <!-- Scripts -->
-     <script src="./js/config.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="./scripts.js"></script>
+    <script src="./js/config.js"></script>
     <script src="js/checkout.js"></script>
+    <script src="./scripts.js"></script>
 </body>
 
 </html>

@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('Checking user ID from localStorage:', userId);
     console.log('Checking authToken from localStorage:', authToken);
 
+    // If user is not authenticated, redirect to login
     if (!userId || !authToken) {
         alert('User not authenticated. Please log in.');
         window.location.href = 'login.html';
@@ -26,34 +27,35 @@ document.addEventListener('DOMContentLoaded', function () {
     easypaisaDetailsSection.style.display = 'none';
     jazzcashDetailsSection.style.display = 'none';
 
-    // Attach change handler for payment methods
-    paymentMethodInputs.forEach(input => {
-        input.addEventListener('change', handlePaymentMethodChange);
-    });
-
-    // Prioritize Cart Checkout over Buy Now
-    fetch(`${config.API_URL}/api/cart/${userId}`, {
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-        }
-    })
-    .then(response => response.json())
-    .then(cart => {
-        if (cart.items && cart.items.length > 0) {
-            // Clear Buy Now product if cart has items
-            clearBuyNow();
-            displayOrderItems(cart.items);
-            updateTotalPrices(cart.items);
-        } else if (buyNowProductId) {
-            // If cart is empty but Buy Now product exists, fetch and display it
-            fetchSingleProduct(buyNowProductId);
-        } else {
-            // Cart and Buy Now are both empty, display a message
-            orderSummaryElement.innerHTML = '<p>Your cart is empty.</p>';
-            updateTotalPrices([]);
-        }
-    })
-    .catch(error => console.error('Error fetching cart items:', error));
+    // Fetch cart or Buy Now product details
+    if (buyNowProductId) {
+        // Fetch and display Buy Now product
+        fetchSingleProduct(buyNowProductId);
+    } else {
+        // Fetch cart details
+        fetch(`${config.API_URL}/api/cart/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            }
+        })
+        .then(response => response.json())
+        .then(cart => {
+            if (cart.items && cart.items.length > 0) {
+                // If cart has items, clear Buy Now product
+                clearBuyNow();
+                displayOrderItems(cart.items);
+                updateTotalPrices(cart.items);
+            } else {
+                // Cart and Buy Now are both empty
+                orderSummaryElement.innerHTML = '<p>Your cart is empty.</p>';
+                updateTotalPrices([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching cart items:', error);
+            alert('Error fetching cart items. Please try again.');
+        });
+    }
 
     // Clear Buy Now product from localStorage
     function clearBuyNow() {
@@ -78,25 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Product fetched successfully:', product);
             displayBuyNowProduct(product);
             updateTotalPrices([{ product, quantity: 1 }]); // Single product with quantity 1
-
-            // *** Ensure the "Place Order" button is displayed for Buy Now flow ***
             ensurePlaceOrderButton();
         })
-        .catch(error => console.error('Error fetching product:', error));
-    }
-
-    // Ensure the "Place Order" button is added to the DOM for Buy Now flow
-    function ensurePlaceOrderButton() {
-        const placeOrderButtonExists = document.getElementById('place-order-button');
-        if (!placeOrderButtonExists) {
-            const buttonHTML = `
-                <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
-                    Place Order
-                </button>
-            `;
-            orderSummaryElement.insertAdjacentHTML('beforeend', buttonHTML);
-            attachEventListeners();
-        }
+        .catch(error => {
+            console.error('Error fetching product:', error);
+            alert('Error fetching product. Please try again.');
+        });
     }
 
     // Display Buy Now product in the checkout summary
@@ -159,26 +148,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p>Grand Total</p>
                     <p><strong id="grand-total-amount">PKR 0</strong></p>
                 </div>
-            </div>
-        `;
+            </div>`;
 
         orderSummaryElement.innerHTML = itemsHTML;
-        ensurePlaceOrderButton();  // Ensure button is present for cart checkout flow
+        ensurePlaceOrderButton();
     }
 
     // Update the total prices (subtotal and grand total)
     function updateTotalPrices(items) {
         let subtotal = 0;
-
         items.forEach(item => {
             const itemTotal = item.product.price * item.quantity;
             subtotal += itemTotal;
         });
-
         console.log('Calculated subtotal:', subtotal);
-
         subtotalElement.textContent = `PKR ${subtotal.toFixed(2)}`;
         grandTotalElement.textContent = `PKR ${subtotal.toFixed(2)}`;
+    }
+
+    // Ensure the "Place Order" button is added to the DOM
+    function ensurePlaceOrderButton() {
+        const placeOrderButtonExists = document.getElementById('place-order-button');
+        if (!placeOrderButtonExists) {
+            const buttonHTML = `
+                <button type="submit" id="place-order-button" class="btn btn-primary btn-block mt-3">
+                    Place Order
+                </button>`;
+            orderSummaryElement.insertAdjacentHTML('beforeend', buttonHTML);
+            attachEventListeners();
+        }
     }
 
     // Attach event listeners to the "Place Order" button
@@ -201,36 +199,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                if (selectedPaymentMethod.value === 'COD') {
-                    createOrder();
-                } else {
-                    handleProofOfPayment(selectedPaymentMethod.value);
-                }
+                createOrder();
             });
         } else {
             console.error('Place Order button not found in DOM.');
         }
-    }
-
-    // Handle changing the payment method
-    function handlePaymentMethodChange(event) {
-        const selectedPaymentMethod = event.target.value;
-        console.log('Payment method changed:', selectedPaymentMethod);
-
-        bankDetailsSection.style.display = selectedPaymentMethod === 'Bank' ? 'block' : 'none';
-        easypaisaDetailsSection.style.display = selectedPaymentMethod === 'Easypaisa' ? 'block' : 'none';
-        jazzcashDetailsSection.style.display = selectedPaymentMethod === 'JazzCash' ? 'block' : 'none';
-    }
-
-    // Handle proof of payment for non-COD methods
-    function handleProofOfPayment(paymentMethod) {
-        const proofInput = document.querySelector(`#${paymentMethod.toLowerCase()}-proof`);
-        if (!proofInput || !proofInput.files.length) {
-            alert(`Please upload proof of payment for ${paymentMethod}.`);
-            return;
-        }
-
-        createOrder(paymentMethod, proofInput.files[0]);
     }
 
     // Validate form fields before placing the order
@@ -252,92 +225,82 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Create an order by sending data to the backend
-    // Create an order by sending data as JSON to the backend
-function createOrder(paymentMethod = 'COD', proofOfPaymentFile = null) {
-    console.log('Creating order...');
+    function createOrder() {
+        console.log('Creating order with Buy Now Product ID:', buyNowProductId);
     
-    const firstName = document.getElementById('first-name').value || '';
-    const lastName = document.getElementById('last-name').value || '';
-    const email = document.getElementById('email-address').value || '';
-    const phone = document.getElementById('telephone').value || '';
-    const address = document.getElementById('billing-address').value || '';
-    const city = document.getElementById('city').value || '';
-    const postalCode = document.getElementById('postal-code').value || '';
-
-    // Ensure none of the fields are undefined or null
-    if (!firstName || !lastName || !email || !phone || !address || !city || !postalCode) {
-        console.error('Some required fields are empty.');
-        alert('Please fill out all fields.');
-        return;
-    }
-
-    // Construct the shippingAddress object
-    const shippingAddress = {
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
-        city,
-        postalCode
-    };
-
-    // Construct the order data
-    const orderData = {
-        userId: userId,
-        paymentMethod: paymentMethod,
-        totalAmount: parseFloat(grandTotalElement.textContent.replace('PKR ', '')),
-        shippingAddress: shippingAddress,  // Send as JSON object
-        buyNowProductId: buyNowProductId ? buyNowProductId : null
-    };
-
-    console.log('Order details:', orderData);
-
-    fetch(`${config.API_URL}/api/orders/create`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json' // Important: sending as JSON
-        },
-        body: JSON.stringify(orderData) // Convert the orderData object to a JSON string
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => { throw new Error(err.message); });
-        }
-        return response.json();
-    })
-    .then(order => {
-        console.log('Order created successfully:', order);
-        alert('Order created successfully!');
-
-        // Clear the Buy Now product and reset the cart count
-        clearBuyNow();
-        updateCartCount();
-
-        window.location.href = 'order-confirmation.html';
-    })
-    .catch(error => {
-        console.error('Error creating order:', error);
-        alert('Failed to create order. Please try again.');
-    });
-}
-
+        const orderData = {
+            userId,
+            paymentMethod: getSelectedPaymentMethod(),
+            totalAmount: parseFloat(grandTotalElement.textContent.replace('PKR ', '')),
+            shippingAddress: {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('email-address').value,
+                phone: document.getElementById('telephone').value,
+                address: document.getElementById('billing-address').value,
+                city: document.getElementById('city').value,
+                postalCode: document.getElementById('postal-code').value,
+            },
+            buyNowProductId,
+        };
     
-
-    // Function to update the cart count in the header
-    function updateCartCount() {
-        fetch(`${config.API_URL}/api/cart/${userId}`, {
+        console.log('Order data to be sent:', orderData);
+    
+        fetch(`${config.API_URL}/api/orders/create`, {
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text(); // Get response as text
+        })
+        .then(responseText => {
+            try {
+                const order = JSON.parse(responseText); // Try parsing response as JSON
+                console.log('Order created successfully:', order);
+                alert('Order placed successfully!');
+                clearBuyNow();
+                window.location.href = 'order-confirmation.html';
+            } catch (e) {
+                console.error('Error parsing response as JSON:', e);
+                alert('Error placing order. Please try again.');
             }
         })
-        .then(response => response.json())
-        .then(cart => {
-            const cartCountElement = document.getElementById('cart-count');
-            const itemCount = cart.items.reduce((total, item) => total + item.quantity, 0);
-            cartCountElement.textContent = itemCount;
-        })
-        .catch(error => console.error('Error fetching cart count:', error));
+        .catch(error => {
+            console.error('Error placing order:', error);
+            alert('Error placing order. Please try again.');
+        });
     }
+    
+
+    // Get selected payment method
+    function getSelectedPaymentMethod() {
+        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
+        return selectedPaymentMethod ? selectedPaymentMethod.value : '';
+    }
+
+    // Event listeners for payment method selection
+    paymentMethodInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            if (this.value === 'bank') {
+                bankDetailsSection.style.display = 'block';
+                easypaisaDetailsSection.style.display = 'none';
+                jazzcashDetailsSection.style.display = 'none';
+            } else if (this.value === 'easypaisa') {
+                bankDetailsSection.style.display = 'none';
+                easypaisaDetailsSection.style.display = 'block';
+                jazzcashDetailsSection.style.display = 'none';
+            } else if (this.value === 'jazzcash') {
+                bankDetailsSection.style.display = 'none';
+                easypaisaDetailsSection.style.display = 'none';
+                jazzcashDetailsSection.style.display = 'block';
+            }
+        });
+    });
 });
